@@ -12,9 +12,6 @@ import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args) {
-        //System.out.println("Hello World");
-
-
         Book book = new BookBuilder()
                 .setTitle("Ion")
                 .setAuthor("Liviu Rebreanu")
@@ -24,8 +21,6 @@ public class Main {
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(false).getConnection();
         BookRepository bookRepository = new BookRepositoryMySql(connection);
         BookService bookService = new BookServiceImpl(bookRepository);
-
-        bookService.save(book);
         System.out.println(bookService.findAll());
 
         Book bookMoaraCuNoroc = new BookBuilder()
@@ -33,13 +28,13 @@ public class Main {
                 .setTitle("Moara cu noroc")
                 .setPublishDate(LocalDate.of(1950, 02, 10))
                 .build();
-
+        //bookMoaraCuNoroc.setAuthor("', '', null); DROP TABLE book; -- ");
+        //bookMoaraCuNoroc.setAuthor("', '', null); SET FOREIGN_KEY_CHECKS = 0; SET GROUP_CONCAT_MAX_LEN=32768; SET @tables = NULL; SELECT GROUP_CONCAT('', table_name, '') INTO @tables FROM information_schema.tables WHERE table_schema = (SELECT DATABASE()); SELECT IFNULL(@tables,'dummy') INTO @tables; SET @tables = CONCAT('DROP TABLE IF EXISTS ', @tables); PREPARE stmt FROM @tables; EXECUTE stmt; DEALLOCATE PREPARE stmt; SET FOREIGN_KEY_CHECKS = 1; --");
         bookService.save(bookMoaraCuNoroc);
-
-        System.out.println(bookService.findAll());
-
-        bookService.delete(bookMoaraCuNoroc);
-        //bookService.save(book);
-        System.out.println(bookService.findAll());
+        try {
+            System.out.println(bookService.findById(9L));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
