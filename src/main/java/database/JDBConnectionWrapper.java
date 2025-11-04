@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static com.mysql.cj.conf.PropertyKey.allowMultiQueries;
 import static java.lang.Class.forName;
 
 public class JDBConnectionWrapper {
@@ -24,7 +25,7 @@ public class JDBConnectionWrapper {
     public JDBConnectionWrapper(String schema) {
         try {
             Class.forName(JDBC_DRIVER);
-            connection = DriverManager.getConnection(DB_URL + schema, USER, PASSWORD);
+            connection = DriverManager.getConnection(DB_URL + schema + "?allowMultiQueries=true", USER, PASSWORD);
             createTables();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
