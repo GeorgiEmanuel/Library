@@ -3,7 +3,7 @@ package mapper;
 import model.Book;
 import model.builder.BookBuilder;
 import view.model.BookDTO;
-import view.model.BookDTOBuilder;
+import view.model.builder.BookDTOBuilder;
 
 import java.time.LocalDate;
 import java.util.List;

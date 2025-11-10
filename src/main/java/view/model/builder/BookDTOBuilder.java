@@ -1,4 +1,6 @@
-package view.model;
+package view.model.builder;
+
+import view.model.BookDTO;
 
 public class BookDTOBuilder {
 
