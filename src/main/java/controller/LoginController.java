@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import launcher.EmployeeComponentFactory;
 import launcher.LoginComponentFactory;
 import model.User;
+import model.validator.Notification;
 import model.validator.UserValidator;
 import service.user.AuthentificationService;
 import view.LoginView;
@@ -14,13 +15,11 @@ import java.util.List;
 public class LoginController {
     private final LoginView loginView;
     private final AuthentificationService authentificationService;
-    private final UserValidator userValidator;
 
 
-    public LoginController(LoginView loginView, AuthentificationService authentificationService, UserValidator userValidator) {
+    public LoginController(LoginView loginView, AuthentificationService authentificationService) {
         this.loginView = loginView;
         this.authentificationService = authentificationService;
-        this.userValidator = userValidator;
 
         this.loginView.addLoginButtonListener(new LogInButtonListener());
         this.loginView.addRegisterButtonListener(new RegisterButtonListener());
@@ -33,10 +32,10 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            User user = authentificationService.login(username, password);
+            Notification<User> loginNotification = authentificationService.login(username, password);
 
-            if (user == null) {
-                loginView.setActionTargetText("Invalid Username or password!");
+            if (loginNotification.hasErrors()) {
+                loginView.setActionTargetText(loginNotification.getFormattedErrors());
             } else {
                 loginView.setActionTargetText("LogIn Successful!");
                 EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
@@ -52,16 +51,12 @@ public class LoginController {
             String username = loginView.getUsername();
             String password = loginView.getPassword();
 
-            userValidator.validate(username, password);
-            final List<String> errors = userValidator.getErrors();
-            if (errors.isEmpty()) {
-                if (authentificationService.register(username, password)) {
-                    loginView.setActionTargetText("Register successful");
-                } else {
-                    loginView.setActionTargetText("Invalid Username or password. User may be already taken!");
-                }
+            Notification<Boolean> registerNotification = authentificationService.register(username, password);
+
+            if (registerNotification.hasErrors()) {
+                loginView.setActionTargetText(registerNotification.getFormattedErrors());
             } else {
-                loginView.setActionTargetText(userValidator.getFormattedErrors());
+                loginView.setActionTargetText("Register successful");
             }
 
         }

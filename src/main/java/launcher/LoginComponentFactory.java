@@ -23,7 +23,6 @@ public class LoginComponentFactory {
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
     private final BookRepositoryMySql bookRepository;
-    private final UserValidator userValidator;
     private static LoginComponentFactory instance;
     private static Boolean componentsForTests;
     private static Stage stage;
@@ -46,8 +45,7 @@ public class LoginComponentFactory {
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
         this.authentificationService = new AuthentificationServiceImpl(userRepository, rightsRolesRepository);
         this.loginView = new LoginView(stage);
-        this.userValidator = new UserValidator(userRepository);
-        this.loginController = new LoginController(loginView, authentificationService, userValidator);
+        this.loginController = new LoginController(loginView, authentificationService);
         this.bookRepository = new BookRepositoryMySql(connection);
     }
 

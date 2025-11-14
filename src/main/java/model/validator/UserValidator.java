@@ -13,28 +13,20 @@ public class UserValidator {
     private static final String EMAIL_VALIDATION_REGEX =  "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
     public static final int MIN_PASSWORD_LENGTH = 8;
     private final List<String> errors;
-    private final UserRepository userRepository;
+    private final User user;
 
-    public UserValidator(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserValidator(User user) {
+        this.user = user;
         this.errors = new ArrayList<>();
     }
 
-    public boolean validate(String username, String password){
-        errors.clear();
-        validateEmailUniqueness(username);
-        validateUsername(username);
-        validatePassword(password);
+    public boolean validate(){
+        validateUsername(user.getUsername());
+        validatePassword(user.getPassword());
 
         return errors.isEmpty();
     }
 
-    private void validateEmailUniqueness(String email){
-        final boolean response = userRepository.existsByUsername(email);
-        if (response) {
-            errors.add("Email is already taken");
-        }
-    }
     private void validateUsername(String username){
         if(!Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(username).matches()){
             errors.add("Email is not valid!");
@@ -51,7 +43,7 @@ public class UserValidator {
         }
 
         if(!containsDigit(password)){
-            errors.add("Password must contain at leas one digit!");
+            errors.add("Password must contain at least one digit!");
         }
     }
 
