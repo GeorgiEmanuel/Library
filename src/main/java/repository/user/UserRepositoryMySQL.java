@@ -58,26 +58,43 @@ public class UserRepositoryMySQL implements UserRepository{
     }
 
     @Override
-    public boolean save(User user) {
+    public Notification<User> save(User user) {
+        Notification<User> saveNotification = new Notification<>();
+        String username = user.getUsername();
         try {
             PreparedStatement insertUserStatement = connection
                     .prepareStatement("INSERT INTO user values (null, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-            insertUserStatement.setString(1, user.getUsername());
+            insertUserStatement.setString(1, username);
             insertUserStatement.setString(2, user.getPassword());
-            insertUserStatement.executeUpdate();
 
-            ResultSet rs = insertUserStatement.getGeneratedKeys();
-            rs.next();
-            long userId = rs.getLong(1);
-            user.setId(userId);
+            if (!existsByUsername(username)) {
 
-            rightsRolesRepository.addRolesToUser(user, user.getRoles());
+                int rowsInserted = insertUserStatement.executeUpdate();
+                if (rowsInserted == 0){
+                    saveNotification.addError("User insert failed!");
+                    return saveNotification;
+                }
+                ResultSet rs = insertUserStatement.getGeneratedKeys();
+                if (rs.next()) {
 
-            return true;
-        }catch (SQLException e){
+                    long userId = rs.getLong(1);
+                    user.setId(userId);
+                    rightsRolesRepository.addRolesToUser(user, user.getRoles());
+                    saveNotification.setResult(user);
+
+                } else {
+                    saveNotification.addError("User id generation failed!");
+                }
+
+            } else {
+                saveNotification.addError("Email is already taken");
+                return saveNotification;
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
-            return false;
+            saveNotification.addError("Something is wrong with the Database!");
         }
+        return saveNotification;
     }
 
     @Override
