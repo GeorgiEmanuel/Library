@@ -40,12 +40,19 @@ public class AuthentificationServiceImpl implements  AuthentificationService{
         boolean userValid = userValidator.validate();
         Notification<Boolean> userRegisterNotification = new Notification<>();
 
-        if (!userValid){
+        if (!userValid) {
             userValidator.getErrors().forEach(userRegisterNotification::addError);
             userRegisterNotification.setResult(Boolean.FALSE);
         } else {
             user.setPassword(hashPassword(password));
-            userRegisterNotification.setResult(userRepository.save(user));
+            Notification<User> saveNotification = userRepository.save(user);
+            if (saveNotification.hasErrors()) {
+                saveNotification.getErrors().forEach(userRegisterNotification::addError);
+                userRegisterNotification.setResult(Boolean.FALSE);
+            } else {
+                userRegisterNotification.setResult(Boolean.TRUE);
+            }
+
         }
 
         return userRegisterNotification;
