@@ -1,6 +1,8 @@
 package repository.user;
 
+import model.Book;
 import model.User;
+import model.builder.BookBuilder;
 import model.builder.UserBuilder;
 import model.validator.Notification;
 import repository.security.RightsRolesRepository;
@@ -8,6 +10,7 @@ import repository.security.RightsRolesRepository;
 import java.sql.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static database.Constants.Tables.USER;
 
@@ -120,5 +123,47 @@ public class UserRepositoryMySQL implements UserRepository{
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public Optional<User> findById(Long id){
+        Optional<User> user = Optional.empty();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM " + USER + " WHERE id = ?");
+            preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user =  Optional.of(getUserFromResultSet(resultSet));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+
+
+    @Override
+    public User findByUsername(String username)  {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement("Select * from " + USER + " where username = ?");
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return getUserFromResultSet(resultSet);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private User getUserFromResultSet(ResultSet resultSet) throws SQLException{
+        return new UserBuilder()
+                .setId(resultSet.getLong("id"))
+                .setUsername(resultSet.getString("username"))
+                .build();
     }
 }

@@ -29,6 +29,16 @@ public class BookBuilder {
         this.book.setPublishedDate(publishDate);
         return this;
     }
+
+    public BookBuilder setPrice(Long price){
+        this.book.setPrice(price);
+        return this;
+    }
+
+    public BookBuilder setQuantity(Long quantity){
+        this.book.setQuantity(quantity);
+        return this;
+    }
     public Book build(){
         return book;
     }

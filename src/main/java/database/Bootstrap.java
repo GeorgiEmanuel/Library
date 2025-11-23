@@ -22,9 +22,9 @@ public class Bootstrap {
     private static RightsRolesRepository rightsRolesRepository;
 
     public static void main(String[] args) throws SQLException {
-        dropAll();
+//        dropAll();
 
-        bootstrapTables();
+         bootstrapTables();
 
         bootstrapUserData();
     }
@@ -44,7 +44,8 @@ public class Bootstrap {
                     "TRUNCATE `user_role`;",
                     "DROP TABLE `user_role`;",
                     "TRUNCATE `role`;",
-                    "DROP TABLE `book`, `role`, `user`;",
+                    "TRUNCATE `order`;",
+                    "DROP TABLE `order`, `book`, `role`, `user`;",
 
             };
 

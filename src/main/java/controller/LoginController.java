@@ -6,11 +6,9 @@ import launcher.EmployeeComponentFactory;
 import launcher.LoginComponentFactory;
 import model.User;
 import model.validator.Notification;
-import model.validator.UserValidator;
 import service.user.AuthentificationService;
 import view.LoginView;
 
-import java.util.List;
 
 public class LoginController {
     private final LoginView loginView;
@@ -34,11 +32,12 @@ public class LoginController {
 
             Notification<User> loginNotification = authentificationService.login(username, password);
 
+
             if (loginNotification.hasErrors()) {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             } else {
                 loginView.setActionTargetText("LogIn Successful!");
-                EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), authentificationService.findByUsername(username));
             }
 
         }

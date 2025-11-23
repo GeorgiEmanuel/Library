@@ -40,4 +40,18 @@ public class BookRepositoryMock implements BookRepository{
     public void removeAll() {
         books.clear();
     }
+
+    @Override
+    public boolean decrementQuantity(Long id, Long quantity){
+      Optional<Book> optionalBook = books.parallelStream()
+                .filter(it -> it.getId().equals(id))
+                .findFirst();
+      if (optionalBook.isEmpty()){
+          return false;
+      }else {
+          Book book = optionalBook.get();
+          book.setQuantity(book.getQuantity() - 1);
+          return true;
+      }
+    }
 }
