@@ -53,4 +53,10 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
         cache.invalidateCache();
         decoratedBookRepository.removeAll();
     }
+
+    @Override
+    public boolean decrementQuantity(Long id, Long quantity){
+        cache.invalidateCache();
+        return decoratedBookRepository.decrementQuantity(id, quantity);
+    }
 }

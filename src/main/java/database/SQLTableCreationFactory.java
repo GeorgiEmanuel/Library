@@ -7,10 +7,12 @@ public class SQLTableCreationFactory {
     public String getCreateSQLForTable(String table) {
         return switch (table) {
             case BOOK -> "CREATE TABLE IF NOT EXISTS book (" +
-                    " id int(11) NOT NULL AUTO_INCREMENT," +
+                    " id INT NOT NULL AUTO_INCREMENT," +
                     " author varchar(500) NOT NULL," +
                     " title varchar(500) NOT NULL," +
                     " publishedDate datetime DEFAULT NULL," +
+                    " quantity INT NOT NULL," +
+                    " price INT NOT NULL," +
                     " PRIMARY KEY (id)," +
                     " UNIQUE KEY id_UNIQUE (id)" +
                     ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
@@ -69,6 +71,28 @@ public class SQLTableCreationFactory {
                     "   REFERENCES role (id)" +
                     "   ON DELETE CASCADE" +
                     "   ON UPDATE CASCADE);";
+            case ORDER -> "\tCREATE TABLE IF NOT  EXISTS `order` ("+
+                    " id int NOT NULL AUTO_INCREMENT," +
+                    " user_id INT NOT NULL," +
+                    " book_id INT NOT NULL," +
+                    " quantity INT NOT NULL," +
+                    " price INT NOT NULL," +
+                    " purchased_date datetime NOT NULL," +
+                    " PRIMARY KEY (id),"+
+                    " UNIQUE INDEX id_UNIQUE (id ASC)," +
+                    " INDEX user_id_idx (user_id ASC)," +
+                    " INDEX book_id_idx (book_id ASC)," +
+                    " CONSTRAINT fk_user_id" +
+                    "   FOREIGN KEY (user_id)" +
+                    "   REFERENCES user (id)" +
+                    "   ON DELETE CASCADE" +
+                    "   ON UPDATE CASCADE," +
+                    " CONSTRAINT fk_book_id" +
+                    "   FOREIGN KEY (book_id)"+
+                    "   REFERENCES book (id)" +
+                    "   ON DELETE CASCADE" +
+                    "   ON UPDATE CASCADE);";
+
             default -> "";
         };
     }

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static database.Constants.Tables.BOOK;
+
 public class BookRepositoryMySql implements BookRepository{
 
     private final Connection connection;
@@ -56,12 +58,14 @@ public class BookRepositoryMySql implements BookRepository{
     @Override
     public boolean save(Book book) {
 
-        String newSql = "INSERT INTO book VALUES(null, ?, ?, ?);";
+        String newSql = "INSERT INTO book VALUES(null, ?, ?, ?, ?, ?);";
         try{
             PreparedStatement preparedStatement = connection.prepareStatement(newSql);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setLong(4, book.getQuantity());
+            preparedStatement.setLong(5, book.getPrice());
             int rowsInserted = preparedStatement.executeUpdate();
 
             return rowsInserted == 1;
@@ -106,7 +110,24 @@ public class BookRepositoryMySql implements BookRepository{
                 .setId(resultSet.getLong("id"))
                 .setTitle(resultSet.getString("title"))
                 .setAuthor(resultSet.getString("author"))
+                .setQuantity(resultSet.getLong("quantity"))
+                .setPrice(resultSet.getLong("price"))
                 .setPublishDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
                 .build();
+    }
+
+    @Override
+    public boolean decrementQuantity(Long id, Long quantity){
+        String updateQuantitySql = "UPDATE book SET quantity=? WHERE ID=?;";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(updateQuantitySql);
+            preparedStatement.setLong(1, (quantity));
+            preparedStatement.setLong(2, id);
+            int rowsUpdated = preparedStatement.executeUpdate();
+            return rowsUpdated == 1;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
     }
 }

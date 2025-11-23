@@ -1,16 +1,22 @@
 import database.DataBaseConnectionFactory;
 import model.Book;
+import model.Order;
 import model.builder.BookBuilder;
+import model.builder.OrderBuilder;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryCacheDecorator;
 import repository.book.BookRepositoryMySql;
 import repository.book.Cache;
+import repository.order.OrderRepository;
+import repository.order.OrderRepositoryMySql;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
 import service.book.BookService;
 import service.book.BookServiceImpl;
+import service.order.OrderService;
+import service.order.OrderServiceImpl;
 import service.user.AuthentificationService;
 import service.user.AuthentificationServiceImpl;
 
@@ -48,11 +54,16 @@ public class Main {
 //            e.printStackTrace();
 //        }
 
-        RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
-        UserRepository userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
-        AuthentificationService authentificationService = new AuthentificationServiceImpl(userRepository, rightsRolesRepository);
+//        RightsRolesRepository rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
+//        UserRepository userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
+//        AuthentificationService authentificationService = new AuthentificationServiceImpl(userRepository, rightsRolesRepository);
+//
+//        authentificationService.register("Ion", "parola123!");
 
-        authentificationService.register("Ion", "parola123!");
+        OrderRepository orderRepository = new OrderRepositoryMySql(connection);
+        OrderService orderService = new OrderServiceImpl(orderRepository);
+
+//        orderService.orderBook(1L, 3L, 2L, 3L, LocalDate.of(1910, 10, 20));
 
     }
 }

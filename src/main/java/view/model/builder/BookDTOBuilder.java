@@ -18,7 +18,23 @@ public class BookDTOBuilder {
         return this;
     }
 
+    public BookDTOBuilder setQuantity(Long quantity){
+        bookDTO.setQuantity(quantity);
+        return this;
+    }
+
+    public BookDTOBuilder setPrice(Long price){
+        bookDTO.setPrice(price);
+        return this;
+    }
+
+    public BookDTOBuilder setId(Long id){
+        bookDTO.setId(id);
+        return this;
+    }
     public BookDTO build(){
         return bookDTO;
     }
+
+
 }

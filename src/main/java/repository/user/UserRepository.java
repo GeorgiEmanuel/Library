@@ -4,6 +4,7 @@ import model.User;
 import model.validator.Notification;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
 
@@ -16,4 +17,8 @@ public interface UserRepository {
     void removeAll();
 
     boolean existsByUsername(String username);
+
+    Optional<User> findById(Long id);
+
+    User findByUsername(String username);
 }

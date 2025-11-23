@@ -85,4 +85,9 @@ public class AuthentificationServiceImpl implements  AuthentificationService{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public User findByUsername(String username){
+        return userRepository.findByUsername(username);
+    }
 }

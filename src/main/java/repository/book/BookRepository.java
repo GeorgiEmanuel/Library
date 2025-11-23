@@ -16,4 +16,6 @@ public interface BookRepository {
     boolean delete(Book book);
 
     void removeAll();
+
+    boolean decrementQuantity(Long id, Long quantity);
 }
