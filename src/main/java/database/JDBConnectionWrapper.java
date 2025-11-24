@@ -26,7 +26,6 @@ public class JDBConnectionWrapper {
         try {
             Class.forName(JDBC_DRIVER);
             connection = DriverManager.getConnection(DB_URL + schema + "?allowMultiQueries=true", USER, PASSWORD);
-            createTables();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -34,20 +33,6 @@ public class JDBConnectionWrapper {
         }
     }
 
-    private void createTables() throws SQLException {
-
-        Statement statement = connection.createStatement();
-        String sql = "CREATE TABLE IF NOT EXISTS book(" +
-                " id bigint NOT NULL AUTO_INCREMENT," +
-                " author VARCHAR(500) NOT NULL," +
-                " title VARCHAR(500) NOT NULL," +
-                " publishedDate datetime DEFAULT NULL," +
-                " PRIMARY KEY(id)," +
-                " UNIQUE KEY id_UNIQUE(id)" +
-                ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
-
-        statement.execute(sql);
-    }
 
     public boolean testConnection() throws SQLException {
         return connection.isValid(TIMEOUT);
