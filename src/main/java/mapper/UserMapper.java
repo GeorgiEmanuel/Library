@@ -16,12 +16,14 @@ public class UserMapper {
         return new UserDTOBuilder()
                 .setId(user.getId())
                 .setUsername(user.getUsername())
+                .setPassword(user.getPassword())
                 .build();
     }
 
     public static User convertUserDTOToUser(UserDTO userDTO){
         return new UserBuilder()
                 .setId(userDTO.getId())
+                .setPassword(userDTO.getPassword())
                 .setUsername(userDTO.getUsername())
                 .build();
     }

@@ -8,6 +8,7 @@ import model.validator.Notification;
 import repository.security.RightsRolesRepository;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -24,10 +25,21 @@ public class UserRepositoryMySQL implements UserRepository{
         this.rightsRolesRepository = rightsRolesRepository;
     }
 
-
     @Override
     public List<User> findAll() {
-        return null;
+        String sql = "SELECT * FROM user;";
+        List<User> users = new ArrayList<>();
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()){
+                users.add(getUserFromResultSet(resultSet));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return users;
     }
 
     @Override
@@ -99,7 +111,34 @@ public class UserRepositoryMySQL implements UserRepository{
         }
         return saveNotification;
     }
+    @Override
+    public Notification<Boolean> delete(String username){
+        Notification<Boolean> deleteNotification = new Notification<>();
+        if (!existsByUsername(username)){
+            deleteNotification.setResult(Boolean.FALSE);
+            deleteNotification.addError("User does not exist !");
+            return deleteNotification;
+        }
+        try {
+            PreparedStatement deleteStatement = connection.prepareStatement("DELETE FROM " + USER + " WHERE username = ?");
+            deleteStatement.setString(1, username);
+            int rowsDeleted = deleteStatement.executeUpdate();
+            if (rowsDeleted == 1) {
+                deleteNotification.setResult(Boolean.TRUE);
+            } else {
+                deleteNotification.setResult(Boolean.FALSE);
+                deleteNotification.addError("User delete failed");
+            }
 
+        }catch (SQLException e){
+            e.printStackTrace();
+            deleteNotification.setResult(Boolean.FALSE);
+            deleteNotification.addError("Something is wrong with the Database");
+        }
+        return deleteNotification;
+
+
+    }
     @Override
     public void removeAll() {
         try {
