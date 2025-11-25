@@ -2,18 +2,24 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import launcher.AdminComponentFactory;
+import launcher.AdminSelectPageComponentFactory;
 import launcher.EmployeeComponentFactory;
 import launcher.LoginComponentFactory;
 import model.User;
 import model.validator.Notification;
 import service.user.AuthentificationService;
+import view.AdminSelectPageView;
+import view.AdminView;
 import view.LoginView;
+
+import static database.Constants.Roles.*;
 
 
 public class LoginController {
     private final LoginView loginView;
     private final AuthentificationService authentificationService;
-
+    private User currentSessionUser;
 
     public LoginController(LoginView loginView, AuthentificationService authentificationService) {
         this.loginView = loginView;
@@ -37,7 +43,21 @@ public class LoginController {
                 loginView.setActionTargetText(loginNotification.getFormattedErrors());
             } else {
                 loginView.setActionTargetText("LogIn Successful!");
-                EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), authentificationService.findByUsername(username));
+                currentSessionUser = loginNotification.getResult();
+
+                String currentSessionUserRole = currentSessionUser.getRoles().getFirst().getRole();
+
+                if (currentSessionUserRole.equals(CUSTOMER)){
+                    //EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), authentificationService.findByUsername(username));
+                }
+                else if (currentSessionUserRole.equals(EMPLOYEE)){
+                    EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), authentificationService.findByUsername(username));
+
+                }
+                else if (currentSessionUserRole.equals(ADMINISTRATOR)){
+                    AdminSelectPageComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                }
+
             }
 
         }

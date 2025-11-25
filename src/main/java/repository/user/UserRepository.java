@@ -21,4 +21,6 @@ public interface UserRepository {
     Optional<User> findById(Long id);
 
     User findByUsername(String username);
+
+    Notification<Boolean> delete(String username);
 }
