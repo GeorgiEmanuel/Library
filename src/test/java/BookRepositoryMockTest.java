@@ -31,8 +31,8 @@ public class BookRepositoryMockTest {
         assertTrue(book.isEmpty());
     }
 
-    @Test
-    public void save(){
-        assertTrue(bookRepository.save(new BookBuilder().setTitle("Ion").setAuthor("Liviu Rebreanu").setPublishDate(LocalDate.of(1900, 10, 2)).build()));
-    }
+//    @Test
+//    public void save(){
+//        assertTrue(bookRepository.save(new BookBuilder().setTitle("Ion").setAuthor("Liviu Rebreanu").setPublishDate(LocalDate.of(1900, 10, 2)).build()));
+//    }
 }

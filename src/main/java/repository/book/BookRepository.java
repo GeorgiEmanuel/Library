@@ -1,6 +1,7 @@
 package repository.book;
 
 import model.Book;
+import model.validator.Notification;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,7 +12,7 @@ public interface BookRepository {
 
     Optional<Book> findById(Long id);
 
-    boolean save(Book book);
+    Notification<Book> save(Book book);
 
     boolean delete(Book book);
 

@@ -1,6 +1,7 @@
 package repository.book;
 
 import model.Book;
+import model.validator.Notification;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +38,7 @@ public class BookRepositoryCacheDecorator extends BookRepositoryDecorator{
     }
 
     @Override
-    public boolean save(Book book) {
+    public Notification<Book> save(Book book) {
         cache.invalidateCache();
         return decoratedBookRepository.save(book);
     }

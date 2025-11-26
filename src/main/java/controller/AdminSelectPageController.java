@@ -5,17 +5,20 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import launcher.AdminComponentFactory;
 import launcher.EmployeeComponentFactory;
+import model.User;
 import view.AdminSelectPageView;
 
 public class AdminSelectPageController {
 
     private AdminSelectPageView adminSelectPageView;
+    private final User user;
 
-    public AdminSelectPageController(AdminSelectPageView adminSelectPageView){
+    public AdminSelectPageController(AdminSelectPageView adminSelectPageView, User user){
         this.adminSelectPageView = adminSelectPageView;
 
         this.adminSelectPageView.addBookSceneButtonListener(new BookSceneButtonListener());
         this.adminSelectPageView.addUserSceneButtonListener(new UsersSceneButtonListener());
+        this.user = user;
 
     }
 
@@ -23,7 +26,7 @@ public class AdminSelectPageController {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-            EmployeeComponentFactory.getInstance(Boolean.FALSE, adminSelectPageView.getPrimaryStage(), null);
+            EmployeeComponentFactory.getInstance(Boolean.FALSE, adminSelectPageView.getPrimaryStage(), user);
         }
     }
 

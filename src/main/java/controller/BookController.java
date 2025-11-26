@@ -54,15 +54,15 @@ public class BookController {
                 bookView.addDisplayAlertMessage("Save Error", "Problem at Quantity or Price fields", "Can not have an empty quantity or price field or invalid input");
             } else {
                 BookDTO bookDTO = new BookDTOBuilder().setTitle(title).setAuthor(author).setQuantity(quantity).setPrice(price).build();
-                boolean savedBooks = bookService.save(BookMapper.convertBookDTOToBook(bookDTO));
+                Notification<Book> savedBooks = bookService.save(BookMapper.convertBookDTOToBook(bookDTO));
 
-                if (savedBooks) {
-                    bookView.addDisplayAlertMessage("Save Successful", "Book Added", "Book was successfully added to the database");
-                    bookView.addBookToObservableList(bookDTO);
+                if (savedBooks.hasErrors()) {
+                    bookView.addDisplayAlertMessage("Save Error", "Problem at adding Book", savedBooks.getFormattedErrors());
 
                 } else {
-                    bookView.addDisplayAlertMessage("Save Error", "Problem at adding Book", "There was a problem at adding the book to the database. Please try again !");
-
+                    bookDTO.setId(savedBooks.getResult().getId());
+                    bookView.addDisplayAlertMessage("Save Successful", "Book Added", "Book was successfully added to the database");
+                    bookView.addBookToObservableList(bookDTO);
                 }
             }
 

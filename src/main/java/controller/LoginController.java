@@ -48,14 +48,14 @@ public class LoginController {
                 String currentSessionUserRole = currentSessionUser.getRoles().getFirst().getRole();
 
                 if (currentSessionUserRole.equals(CUSTOMER)){
-                    //EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), authentificationService.findByUsername(username));
+                    //EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), currentSessionUser);
                 }
                 else if (currentSessionUserRole.equals(EMPLOYEE)){
-                    EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), authentificationService.findByUsername(username));
+                    EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), currentSessionUser);
 
                 }
                 else if (currentSessionUserRole.equals(ADMINISTRATOR)){
-                    AdminSelectPageComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage());
+                    AdminSelectPageComponentFactory.getInstance(LoginComponentFactory.getStage(), currentSessionUser);
                 }
 
             }
