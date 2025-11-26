@@ -8,7 +8,7 @@ import java.util.List;
 public interface AdminService {
 
     List<User> findAll();
-    Notification<Boolean> save(User user);
+    Notification<User> save(User user);
     Notification<Boolean> delete(User user);
 }
 

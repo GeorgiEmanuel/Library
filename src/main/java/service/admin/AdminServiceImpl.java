@@ -2,7 +2,6 @@ package service.admin;
 
 import model.Role;
 import model.User;
-import model.builder.UserBuilder;
 import model.validator.Notification;
 import repository.security.RightsRolesRepository;
 import repository.user.UserRepository;
@@ -12,7 +11,6 @@ import java.security.MessageDigest;
 import java.util.Collections;
 import java.util.List;
 
-import static database.Constants.Roles.CUSTOMER;
 import static database.Constants.Roles.EMPLOYEE;
 
 public class AdminServiceImpl implements AdminService {
@@ -31,19 +29,19 @@ public class AdminServiceImpl implements AdminService {
         return userRepository.findAll();
     }
     @Override
-    public Notification<Boolean> save(User user) {
+    public Notification<User> save(User user) {
         Role customerRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
 
-        Notification<Boolean> userRegisterNotification = new Notification<>();
+        Notification<User> userRegisterNotification = new Notification<>();
         user.setPassword(hashPassword(user.getPassword()));
         user.setRoles(Collections.singletonList(customerRole));
         Notification<User> saveNotification = userRepository.save(user);
 
         if (saveNotification.hasErrors()) {
             saveNotification.getErrors().forEach(userRegisterNotification::addError);
-            userRegisterNotification.setResult(Boolean.FALSE);
+            userRegisterNotification.setResult(null);
         } else {
-            userRegisterNotification.setResult(Boolean.TRUE);
+            userRegisterNotification.setResult(user);
         }
 
 

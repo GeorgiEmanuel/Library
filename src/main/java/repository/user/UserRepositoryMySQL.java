@@ -48,13 +48,15 @@ public class UserRepositoryMySQL implements UserRepository{
         Notification<User> findByUsernameAndPasswordNotification = new Notification<>();
         try {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("Select * from "  + USER + " where `username` = ? and `password` = ?");
+                    .prepareStatement("Select * from "  + USER + " where `username` = ? and `password` = ?", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
 
             ResultSet userResultSet = preparedStatement.executeQuery();
             if (userResultSet.next()){
+                long userId = userResultSet.getLong(1);
                 User user = new UserBuilder()
+                        .setId(userId)
                         .setUsername(userResultSet.getString("username"))
                         .setPassword(userResultSet.getString("password"))
                         .setRoles(rightsRolesRepository.findRolesForUser(userResultSet.getLong("id")))

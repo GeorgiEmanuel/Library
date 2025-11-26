@@ -7,22 +7,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class UserDTO {
-    private StringProperty author;
-
-    public void setAuthor(String author) {
-        authorProperty().set(author);
-    }
-
-    public String getAuthor(){
-        return authorProperty().get();
-    }
-    public StringProperty authorProperty(){
-        if (author == null){
-            author = new SimpleStringProperty(this, "author");
-        }
-        return author;
-    }
-
     private StringProperty username;
 
     public void setUsername(String username) { usernameProperty().set(username); }

@@ -2,6 +2,7 @@ package launcher;
 
 import controller.AdminSelectPageController;
 import javafx.stage.Stage;
+import model.User;
 import view.AdminSelectPageView;
 
 public class AdminSelectPageComponentFactory {
@@ -10,19 +11,19 @@ public class AdminSelectPageComponentFactory {
 
     private static volatile AdminSelectPageComponentFactory instance;
 
-    public static AdminSelectPageComponentFactory getInstance(Boolean componentsForTests, Stage stage){
+    public static AdminSelectPageComponentFactory getInstance(Stage stage, User user){
         if (instance == null){
             synchronized (AdminSelectPageComponentFactory.class){
                 if (instance == null){
-                    instance = new AdminSelectPageComponentFactory(componentsForTests, stage);
+                    instance = new AdminSelectPageComponentFactory(stage, user);
                 }
             }
         }
         return instance;
     }
 
-    public AdminSelectPageComponentFactory(Boolean componentsForTests, Stage primaryStage){
+    public AdminSelectPageComponentFactory(Stage primaryStage, User user){
         this.adminSelectPageView = new AdminSelectPageView(primaryStage);
-        this.adminSelectPageController = new AdminSelectPageController(adminSelectPageView);
+        this.adminSelectPageController = new AdminSelectPageController(adminSelectPageView, user);
     }
 }

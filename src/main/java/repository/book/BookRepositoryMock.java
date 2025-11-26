@@ -1,6 +1,7 @@
 package repository.book;
 
 import model.Book;
+import model.validator.Notification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,16 @@ public class BookRepositoryMock implements BookRepository{
     }
 
     @Override
-    public boolean save(Book book) {
-        return books.add(book);
+    public Notification<Book> save(Book book) {
+        Notification<Book> saveBookNotification = new Notification<>();
+
+        if (books.add(book)) {
+            saveBookNotification.setResult(book);
+        } else {
+            saveBookNotification.addError("Something is wrong with the repository");
+        }
+
+        return saveBookNotification;
     }
 
     @Override

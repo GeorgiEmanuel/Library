@@ -1,6 +1,7 @@
 package service.book;
 
 import model.Book;
+import model.validator.Notification;
 import repository.book.BookRepository;
 
 import java.time.LocalDate;
@@ -27,7 +28,7 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public boolean save(Book book) {
+    public Notification<Book> save(Book book) {
         return bookRepository.save(book);
     }
 

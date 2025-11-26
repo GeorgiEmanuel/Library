@@ -1,6 +1,7 @@
 package service.book;
 
 import model.Book;
+import model.validator.Notification;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface BookService {
 
     Book findById(Long id);
 
-    boolean save(Book book);
+    Notification<Book> save(Book book);
 
     boolean delete(Book book);
 

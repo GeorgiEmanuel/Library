@@ -2,6 +2,7 @@ package repository.book;
 
 import model.Book;
 import model.builder.BookBuilder;
+import model.validator.Notification;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -56,11 +57,11 @@ public class BookRepositoryMySql implements BookRepository{
     }
 
     @Override
-    public boolean save(Book book) {
+    public Notification<Book> save(Book book) {
+        Notification<Book> saveBookNotification = new Notification<>();
 
-        String newSql = "INSERT INTO book VALUES(null, ?, ?, ?, ?, ?);";
         try{
-            PreparedStatement preparedStatement = connection.prepareStatement(newSql);
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO book VALUES(null, ?, ?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
@@ -68,12 +69,24 @@ public class BookRepositoryMySql implements BookRepository{
             preparedStatement.setLong(5, book.getPrice());
             int rowsInserted = preparedStatement.executeUpdate();
 
-            return rowsInserted == 1;
+            if (rowsInserted == 0){
+                saveBookNotification.addError("Book insert failed!");
+                return saveBookNotification;
+            }
+            ResultSet resultSet = preparedStatement.getGeneratedKeys();
+            if (resultSet.next()) {
 
+                long bookId = resultSet.getLong(1);
+                book.setId(bookId);
+                saveBookNotification.setResult(book);
+            } else {
+                saveBookNotification.addError("Book id generation failed!");
+            }
         }catch (SQLException e){
             e.printStackTrace();
-            return false;
+            saveBookNotification.addError("Something is wrong with the Database !");
         }
+        return saveBookNotification;
     }
 
     @Override

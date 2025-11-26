@@ -2,7 +2,9 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.TextField;
 import mapper.UserMapper;
+import model.User;
 import model.validator.Notification;
 import service.admin.AdminService;
 import view.AdminView;
@@ -29,19 +31,20 @@ public class AdminController {
         public void handle(ActionEvent actionEvent) {
             String username = adminView.getUsername();
             String password = adminView.getPassword();
-
             if (username.isEmpty() || password.isEmpty()) {
                 adminView.addDisplayAlertMessage("Save Error", "Problem at Username or Password fields", "Can not have empty username of password");
 
             } else {
                 UserDTO userDTO = new UserDTOBuilder().setUsername(username).setPassword(password).build();
-                Notification<Boolean> savedUserNotification = adminService.save(UserMapper.convertUserDTOToUser(userDTO));
+                Notification<User> savedUserNotification = adminService.save(UserMapper.convertUserDTOToUser(userDTO));
 
                 if (savedUserNotification.hasErrors()) {
                     adminView.addDisplayAlertMessage("Save Error", "Problem at adding an Employee", savedUserNotification.getFormattedErrors());
                 } else {
-                   // userDTO.setId(adminService.getId);
+                    userDTO.setId(savedUserNotification.getResult().getId());
                     adminView.addDisplayAlertMessage("Save Successful", "Employee Added", "Employee was successfully added to the database");
+                    adminView.setUsernameTextField("");
+                    adminView.setPasswordTextField("");
                     adminView.addUserToObservableList(userDTO);
                 }
 
@@ -55,7 +58,6 @@ public class AdminController {
         public void handle(ActionEvent actionEvent) {
 
             UserDTO userDTO = (UserDTO) adminView.getUserTableView().getSelectionModel().getSelectedItem();
-
             if (userDTO != null) {
                 Notification<Boolean> deleteUserNotification = adminService.delete(UserMapper.convertUserDTOToUser(userDTO));
                 if (deleteUserNotification.hasErrors()) {

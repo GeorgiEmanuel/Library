@@ -146,4 +146,12 @@ public class AdminView {
     public void removeUserFromObservableList(UserDTO userDTO) {
         this.usersObservableList.remove(userDTO);
     }
+
+    public void setUsernameTextField(String usernameTextField) {
+        this.usernameTextField.setText(usernameTextField);
+    }
+
+    public void setPasswordTextField(String passwordTextField) {
+        this.passwordTextField.setText(passwordTextField);
+    }
 }
