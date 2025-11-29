@@ -1,10 +1,14 @@
 package repository.order;
 
+import model.MonthlyReport;
+import model.MonthlyReportRow;
 import model.Order;
+import model.builder.MonthlyReportRowBuilder;
 import model.builder.OrderBuilder;
 import model.validator.Notification;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -77,6 +81,49 @@ public class OrderRepositoryMySql implements OrderRepository {
     public List<Order> existsOrderByUser(String username) {
         return List.of();
     }
+
+    @Override
+    public Notification<MonthlyReport> generateMonthlyReport() {
+        Notification<MonthlyReport> monthlyReportNotification = new Notification<>();
+        List<MonthlyReportRow> monthlyReportRows = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        int currentMonth = now.getMonthValue();
+        int currentYear = now.getYear();
+        try {
+            String statement =
+                    "SELECT u.username AS customer_username, " +
+                    "SUM(o.quantity) AS books_bought, " +
+                    "SUM(o.price) AS total_price " +
+                    "FROM `order` o JOIN `user` u ON o.user_id = u.id " +
+                    "WHERE MONTH(o.purchased_date) = ? " +
+                    "AND YEAR(o.purchased_date) = ? " +
+                    "GROUP BY u.username " +
+                    "ORDER BY books_bought DESC, total_price DESC;";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(statement);
+            preparedStatement.setInt(1, currentMonth);
+            preparedStatement.setInt(2, currentYear);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                monthlyReportRows.add(getMonthlyReportFromResultSet(resultSet));
+            }
+            monthlyReportNotification.setResult(new MonthlyReport(monthlyReportRows));
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            monthlyReportNotification.addError("Something is wrong with the database !");
+        }
+        return monthlyReportNotification;
+    }
+
+    private MonthlyReportRow getMonthlyReportFromResultSet(ResultSet resultSet) throws SQLException{
+        return new MonthlyReportRowBuilder()
+                .setUsername(resultSet.getString("customer_username"))
+                .setNumberOfBooksBought(resultSet.getLong("books_bought"))
+                .setTotalPrice(resultSet.getLong("total_price"))
+                .build();
+    }
+
 
     private Order getOrderFromResultSet(ResultSet resultSet) throws SQLException {
         return new OrderBuilder()

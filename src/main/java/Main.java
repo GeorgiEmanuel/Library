@@ -23,6 +23,12 @@ import service.user.AuthentificationServiceImpl;
 import java.sql.Connection;
 import java.time.LocalDate;
 
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
+
 public class Main {
     public static void main(String[] args) {
 //        Book book = new BookBuilder()
@@ -60,8 +66,8 @@ public class Main {
 //
 //        authentificationService.register("Ion", "parola123!");
 
-        OrderRepository orderRepository = new OrderRepositoryMySql(connection);
-        OrderService orderService = new OrderServiceImpl(orderRepository);
+//        OrderRepository orderRepository = new OrderRepositoryMySql(connection);
+//        OrderService orderService = new OrderServiceImpl(orderRepository);
 
 //        orderService.orderBook(1L, 3L, 2L, 3L, LocalDate.of(1910, 10, 20));
 

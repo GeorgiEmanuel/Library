@@ -2,7 +2,6 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.TextField;
 import mapper.UserMapper;
 import model.User;
 import model.builder.UserBuilder;
@@ -10,7 +9,6 @@ import model.validator.Notification;
 import service.admin.AdminService;
 import view.AdminView;
 import view.model.UserDTO;
-import view.model.builder.UserDTOBuilder;
 
 public class AdminController {
 
@@ -23,6 +21,7 @@ public class AdminController {
 
         this.adminView.addUserButtonListener(new SaveButtonListener());
         this.adminView.addDeleteUserButtonListener(new DeleteButtonListener());
+        this.adminView.addGenerateMonthlyReportButtonListener(new GenerateMonthlyReportButtonListener());
 
     }
 
@@ -72,6 +71,14 @@ public class AdminController {
             }
 
 
+        }
+    }
+
+    private class GenerateMonthlyReportButtonListener implements EventHandler<ActionEvent>{
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            adminService.generateReport();
         }
     }
 

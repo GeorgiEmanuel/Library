@@ -1,15 +1,25 @@
 package service.admin;
 
+import com.lowagie.text.Document;
+import model.MonthlyReport;
 import model.Role;
 import model.User;
 import model.validator.Notification;
+import repository.order.OrderRepository;
 import repository.security.RightsRolesRepository;
 import repository.user.UserRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
+
+import java.io.FileOutputStream;
 
 import static database.Constants.Roles.EMPLOYEE;
 
@@ -19,9 +29,12 @@ public class AdminServiceImpl implements AdminService {
 
     private final RightsRolesRepository rightsRolesRepository;
 
-    public AdminServiceImpl(UserRepository userRepository, RightsRolesRepository rightsRolesRepository){
+    private final OrderRepository orderRepository;
+
+    public AdminServiceImpl(UserRepository userRepository, RightsRolesRepository rightsRolesRepository, OrderRepository orderRepository){
         this.userRepository = userRepository;
         this.rightsRolesRepository = rightsRolesRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -62,6 +75,30 @@ public class AdminServiceImpl implements AdminService {
 
         return userDeleteNotification;
     }
+
+    @Override
+    public Notification<Document> generateReport() {
+        Notification<Document> reportGenerationNotification = new Notification<>();
+        Notification<MonthlyReport>  monthlyReportNotification = orderRepository.generateMonthlyReport();
+        if (monthlyReportNotification.hasErrors()){
+            monthlyReportNotification.getErrors().forEach(reportGenerationNotification::addError);
+
+        } else {
+            Document document = new Document();
+            try {
+                PdfWriter.getInstance(document, new FileOutputStream("Report.pdf"));
+                document.open();
+                document.add(new Paragraph(monthlyReportNotification.getResult().toString()));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                document.close();
+            }
+        }
+        return reportGenerationNotification;
+    }
+
     private String hashPassword(String password){
 
         try{
