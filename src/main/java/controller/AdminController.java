@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import mapper.UserMapper;
 import model.User;
+import model.builder.UserBuilder;
 import model.validator.Notification;
 import service.admin.AdminService;
 import view.AdminView;
@@ -35,17 +36,17 @@ public class AdminController {
                 adminView.addDisplayAlertMessage("Save Error", "Problem at Username or Password fields", "Can not have empty username of password");
 
             } else {
-                UserDTO userDTO = new UserDTOBuilder().setUsername(username).setPassword(password).build();
-                Notification<User> savedUserNotification = adminService.save(UserMapper.convertUserDTOToUser(userDTO));
+                User userToSave = new UserBuilder().setUsername(username).setPassword(password).build();
+                Notification<User> savedUserNotification = adminService.save(userToSave);
 
                 if (savedUserNotification.hasErrors()) {
                     adminView.addDisplayAlertMessage("Save Error", "Problem at adding an Employee", savedUserNotification.getFormattedErrors());
                 } else {
-                    userDTO.setId(savedUserNotification.getResult().getId());
+                    userToSave.setId(savedUserNotification.getResult().getId());
                     adminView.addDisplayAlertMessage("Save Successful", "Employee Added", "Employee was successfully added to the database");
                     adminView.setUsernameTextField("");
                     adminView.setPasswordTextField("");
-                    adminView.addUserToObservableList(userDTO);
+                    adminView.addUserToObservableList(UserMapper.converUserToUserDTO(userToSave));
                 }
 
             }

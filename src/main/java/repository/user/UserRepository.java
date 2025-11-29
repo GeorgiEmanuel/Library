@@ -23,4 +23,6 @@ public interface UserRepository {
     User findByUsername(String username);
 
     Notification<Boolean> delete(String username);
+
+    List<User> findAllEmployees();
 }

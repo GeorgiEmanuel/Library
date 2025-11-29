@@ -2,10 +2,7 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import launcher.AdminComponentFactory;
-import launcher.AdminSelectPageComponentFactory;
-import launcher.EmployeeComponentFactory;
-import launcher.LoginComponentFactory;
+import launcher.*;
 import model.User;
 import model.validator.Notification;
 import service.user.AuthentificationService;
@@ -48,7 +45,7 @@ public class LoginController {
                 String currentSessionUserRole = currentSessionUser.getRoles().getFirst().getRole();
 
                 if (currentSessionUserRole.equals(CUSTOMER)){
-                    //EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), currentSessionUser);
+                    CustomerComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), currentSessionUser);
                 }
                 else if (currentSessionUserRole.equals(EMPLOYEE)){
                     EmployeeComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), currentSessionUser);

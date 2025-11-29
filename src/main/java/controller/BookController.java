@@ -62,6 +62,10 @@ public class BookController {
                 } else {
                     bookDTO.setId(savedBooks.getResult().getId());
                     bookView.addDisplayAlertMessage("Save Successful", "Book Added", "Book was successfully added to the database");
+                    bookView.setAuthorTextField("");
+                    bookView.setTitleTextField("");
+                    bookView.setPriceTextField("");
+                    bookView.setQuantityTextField("");
                     bookView.addBookToObservableList(bookDTO);
                 }
             }

@@ -17,10 +17,6 @@ public class UserDTOBuilder {
         return this;
     }
 
-    public UserDTOBuilder setPassword(String password){
-        userDTO.setPassword(password);
-        return this;
-    }
 
     public UserDTO build(){ return userDTO;}
 

@@ -151,7 +151,7 @@ public class AdminView {
         this.usernameTextField.setText(usernameTextField);
     }
 
-    public void setPasswordTextField(String passwordTextField) {
-        this.passwordTextField.setText(passwordTextField);
+    public void setPasswordTextField(String passwordString) {
+        this.passwordTextField.setText(passwordString);
     }
 }

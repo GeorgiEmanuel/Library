@@ -20,19 +20,6 @@ public class UserDTO {
         return username;
     }
 
-    private StringProperty password;
-
-    public void setPassword(String password) { passwordProperty().set(password); }
-
-    public String getPassword() { return passwordProperty().get(); }
-
-    public StringProperty passwordProperty() {
-        if (password == null){
-            password = new SimpleStringProperty(this, "password");
-        }
-        return password;
-    }
-
     private LongProperty id;
 
     public void setId(Long id){ idProperty().set(id); }
