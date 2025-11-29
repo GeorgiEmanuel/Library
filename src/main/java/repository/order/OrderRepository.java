@@ -1,4 +1,6 @@
 package repository.order;
+import model.MonthlyReport;
+import model.MonthlyReportRow;
 import model.Order;
 import model.validator.Notification;
 
@@ -14,5 +16,6 @@ public interface OrderRepository {
 
     List<Order> existsOrderByUser(String username);
 
+    Notification<MonthlyReport> generateMonthlyReport();
 
 }

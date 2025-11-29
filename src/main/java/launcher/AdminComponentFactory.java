@@ -4,12 +4,16 @@ import controller.AdminController;
 import database.DataBaseConnectionFactory;
 import javafx.stage.Stage;
 import mapper.UserMapper;
+import repository.order.OrderRepository;
+import repository.order.OrderRepositoryMySql;
 import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
 import service.admin.AdminService;
 import service.admin.AdminServiceImpl;
+import service.order.OrderService;
+import service.order.OrderServiceImpl;
 import view.AdminView;
 import view.model.UserDTO;
 
@@ -23,6 +27,7 @@ public class AdminComponentFactory {
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
     private final AdminService adminService;
+    private final OrderRepository orderRepository;
 
 
     private static volatile AdminComponentFactory instance;
@@ -42,7 +47,9 @@ public class AdminComponentFactory {
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
-        this.adminService = new AdminServiceImpl(userRepository, rightsRolesRepository);
+        this.orderRepository = new OrderRepositoryMySql(connection);
+
+        this.adminService = new AdminServiceImpl(userRepository, rightsRolesRepository, orderRepository);
 
         List<UserDTO> usersDTOs = UserMapper.convertUserListToUserDTOList(adminService.findAll());
         this.adminView = new AdminView(primaryStage, usersDTOs);
