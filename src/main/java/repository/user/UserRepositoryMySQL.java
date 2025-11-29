@@ -207,4 +207,26 @@ public class UserRepositoryMySQL implements UserRepository{
                 .setUsername(resultSet.getString("username"))
                 .build();
     }
+
+    @Override
+    public List<User> findAllEmployees(){
+        List<User> employeeList = new ArrayList<>();
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(
+                    "SELECT u.id, u.username " +
+                        "FROM user u JOIN user_role ur ON u.id = ur.user_id " +
+                        "WHERE ur.role_id = ?");
+            preparedStatement.setLong(1, 2L);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                employeeList.add(getUserFromResultSet(resultSet));
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return employeeList;
+
+    }
 }

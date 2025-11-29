@@ -178,4 +178,20 @@ public class BookView {
     public TableView getBookTableView(){
         return bookTableView;
     }
+
+    public void setQuantityTextField(String quantityString) {
+        this.quantityTextField.setText(quantityString);
+    }
+
+    public void setTitleTextField(String titleString) {
+        this.titleTextField.setText(titleString);
+    }
+
+    public void setAuthorTextField(String authorString) {
+        this.authorTextField.setText(authorString);
+    }
+
+    public void setPriceTextField(String priceTextField) {
+        this.priceTextField.setText(priceTextField);
+    }
 }
