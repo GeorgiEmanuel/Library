@@ -47,7 +47,7 @@ public class EmployeeComponentFactory {
     public static void resetInstance(){
         instance = null;
     }
-    public EmployeeComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
+    private EmployeeComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.bookRepository = new BookRepositoryCacheDecorator(new BookRepositoryMySql(connection), new Cache<>());
         this.bookService = new BookServiceImpl(bookRepository);

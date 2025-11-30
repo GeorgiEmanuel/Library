@@ -44,7 +44,7 @@ public class AdminComponentFactory {
     public static void resetInstance(){
         instance = null;
     }
-    public AdminComponentFactory(Boolean componentsForTest, Stage primaryStage) {
+    private AdminComponentFactory(Boolean componentsForTest, Stage primaryStage) {
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);

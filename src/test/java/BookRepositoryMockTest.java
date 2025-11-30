@@ -9,8 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BookRepositoryMockTest {
 
@@ -31,8 +30,8 @@ public class BookRepositoryMockTest {
         assertTrue(book.isEmpty());
     }
 
-//    @Test
-//    public void save(){
-//        assertTrue(bookRepository.save(new BookBuilder().setTitle("Ion").setAuthor("Liviu Rebreanu").setPublishDate(LocalDate.of(1900, 10, 2)).build()));
-//    }
+    @Test
+    public void save(){
+        assertFalse(bookRepository.save(new BookBuilder().setTitle("Ion").setAuthor("Liviu Rebreanu").setPublishDate(LocalDate.of(1900, 10, 2)).build()).hasErrors());
+    }
 }
