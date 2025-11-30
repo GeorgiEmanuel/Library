@@ -36,6 +36,8 @@ public class AdminView {
 
     private Button generateMonthlyReport;
 
+    private Button logOutButton;
+
     public AdminView(Stage primaryStage, List<UserDTO> users) {
 
         primaryStage.setTitle("Admin Panel");
@@ -98,9 +100,10 @@ public class AdminView {
         addUser = new Button("Add User");
         deleteUser = new Button("Delete User");
         generateMonthlyReport = new Button("Generate Report");
+        logOutButton = new Button("Logout");
 
-        HBox buttonBox = new HBox(10);
-        buttonBox.getChildren().addAll(addUser, deleteUser, generateMonthlyReport);
+        HBox buttonBox = new HBox(15);
+        buttonBox.getChildren().addAll(addUser, deleteUser, generateMonthlyReport, logOutButton);
         gridPane.add(buttonBox, 4, 2);
 
     }
@@ -116,6 +119,11 @@ public class AdminView {
     public void addGenerateMonthlyReportButtonListener(EventHandler<ActionEvent> generateReportButtonListener){
         generateMonthlyReport.setOnAction(generateReportButtonListener);
     }
+
+    public void addLogOutButtonListener(EventHandler<ActionEvent> logOutButtonListener){
+        logOutButton.setOnAction(logOutButtonListener);
+    }
+
     public String getUsername() {
         return usernameTextField.getText();
     }

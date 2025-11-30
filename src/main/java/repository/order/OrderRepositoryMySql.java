@@ -104,10 +104,14 @@ public class OrderRepositoryMySql implements OrderRepository {
             preparedStatement.setInt(1, currentMonth);
             preparedStatement.setInt(2, currentYear);
             ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()){
-                monthlyReportRows.add(getMonthlyReportFromResultSet(resultSet));
+            if (!resultSet.isBeforeFirst()){
+                monthlyReportNotification.addError("No data available for the specified time !");
+            } else {
+                while (resultSet.next()) {
+                    monthlyReportRows.add(getMonthlyReportFromResultSet(resultSet));
+                }
+                monthlyReportNotification.setResult(new MonthlyReport(monthlyReportRows));
             }
-            monthlyReportNotification.setResult(new MonthlyReport(monthlyReportRows));
 
         }catch (SQLException e){
             e.printStackTrace();

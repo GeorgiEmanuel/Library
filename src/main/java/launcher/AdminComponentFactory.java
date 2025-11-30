@@ -12,8 +12,6 @@ import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
 import service.admin.AdminService;
 import service.admin.AdminServiceImpl;
-import service.order.OrderService;
-import service.order.OrderServiceImpl;
 import view.AdminView;
 import view.model.UserDTO;
 
@@ -28,7 +26,8 @@ public class AdminComponentFactory {
     private final RightsRolesRepository rightsRolesRepository;
     private final AdminService adminService;
     private final OrderRepository orderRepository;
-
+    private static Boolean componentsForTest;
+    private static Stage stage;
 
     private static volatile AdminComponentFactory instance;
 
@@ -42,7 +41,9 @@ public class AdminComponentFactory {
         }
         return instance;
     }
-
+    public static void resetInstance(){
+        instance = null;
+    }
     public AdminComponentFactory(Boolean componentsForTest, Stage primaryStage) {
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
@@ -57,5 +58,12 @@ public class AdminComponentFactory {
 
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static Boolean getComponentsForTest() {
+        return componentsForTest;
+    }
 }
 

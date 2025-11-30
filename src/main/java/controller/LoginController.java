@@ -52,7 +52,7 @@ public class LoginController {
 
                 }
                 else if (currentSessionUserRole.equals(ADMINISTRATOR)){
-                    AdminSelectPageComponentFactory.getInstance(LoginComponentFactory.getStage(), currentSessionUser);
+                    AdminSelectPageComponentFactory.getInstance(LoginComponentFactory.getComponentsForTests(), LoginComponentFactory.getStage(), currentSessionUser);
                 }
 
             }

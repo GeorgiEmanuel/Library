@@ -1,13 +1,10 @@
 package launcher;
 
-import controller.AdminSelectPageController;
 import controller.CustomerController;
 import database.DataBaseConnectionFactory;
 import javafx.stage.Stage;
 import mapper.BookMapper;
 import mapper.UserMapper;
-import model.Book;
-import model.Order;
 import model.User;
 import repository.book.BookRepository;
 import repository.book.BookRepositoryCacheDecorator;
@@ -19,15 +16,12 @@ import repository.security.RightsRolesRepository;
 import repository.security.RightsRolesRepositoryMySQL;
 import repository.user.UserRepository;
 import repository.user.UserRepositoryMySQL;
-import service.admin.AdminService;
-import service.admin.AdminServiceImpl;
 import service.book.BookService;
 import service.book.BookServiceImpl;
 import service.employee.EmployeeService;
 import service.employee.EmployeeServiceImpl;
 import service.order.OrderService;
 import service.order.OrderServiceImpl;
-import view.BookView;
 import view.CustomerView;
 import view.model.BookDTO;
 import view.model.UserDTO;
@@ -47,6 +41,8 @@ public class CustomerComponentFactory {
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
     private final EmployeeService employeeService;
+    private static Boolean componentsForTest;
+    private static Stage stage;
 
     private static volatile CustomerComponentFactory instance;
 
@@ -61,7 +57,9 @@ public class CustomerComponentFactory {
         }
         return instance;
     }
-
+    public static void resetInstance(){
+        instance = null;
+    }
     public CustomerComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.bookRepository = new BookRepositoryCacheDecorator(new BookRepositoryMySql(connection), new Cache<>());
@@ -72,7 +70,6 @@ public class CustomerComponentFactory {
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
         this.employeeService = new EmployeeServiceImpl(userRepository, rightsRolesRepository);
 
-
         List<BookDTO> booksDTOs = BookMapper.convertBookListToBookDTOList(bookService.findAll());
         List<UserDTO> employeesDTOs = UserMapper.convertUserListToUserDTOList(employeeService.findAllEmployees());
 
@@ -80,4 +77,11 @@ public class CustomerComponentFactory {
         this.customerController = new CustomerController(customerView, orderService, bookService, user);
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static Boolean getComponentsForTest() {
+        return componentsForTest;
+    }
 }

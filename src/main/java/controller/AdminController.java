@@ -1,13 +1,19 @@
 package controller;
 
+import com.lowagie.text.Document;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.stage.Stage;
+import launcher.AdminComponentFactory;
+import launcher.AdminSelectPageComponentFactory;
+import launcher.LoginComponentFactory;
 import mapper.UserMapper;
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;
 import service.admin.AdminService;
 import view.AdminView;
+import view.LoginView;
 import view.model.UserDTO;
 
 public class AdminController {
@@ -22,6 +28,7 @@ public class AdminController {
         this.adminView.addUserButtonListener(new SaveButtonListener());
         this.adminView.addDeleteUserButtonListener(new DeleteButtonListener());
         this.adminView.addGenerateMonthlyReportButtonListener(new GenerateMonthlyReportButtonListener());
+        this.adminView.addLogOutButtonListener(new LogOutButtonListener());
 
     }
 
@@ -78,8 +85,26 @@ public class AdminController {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-            adminService.generateReport();
+          Notification<Document> reportGenerationNotification =  adminService.generateReport();
+          if (reportGenerationNotification.hasErrors()){
+              adminView.addDisplayAlertMessage("Report generation error !", "Report generation failed !", reportGenerationNotification.getFormattedErrors());
+          } else {
+              adminView.addDisplayAlertMessage("Report generated successfully !", "Monthly report available in local directory !", "Check monthly report for data accuracy");
+          }
+
         }
     }
 
+    public class LogOutButtonListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            Stage primaryStage = LoginComponentFactory.getStage();
+            LoginView loginView = LoginComponentFactory.getInstance(AdminComponentFactory.getComponentsForTest(), AdminComponentFactory.getStage()).getLoginView();
+            loginView.resetLoginViewFields();
+            AdminSelectPageComponentFactory.resetInstance();
+            AdminComponentFactory.resetInstance();
+            primaryStage.setScene(loginView.getScene());
+        }
+    }
 }

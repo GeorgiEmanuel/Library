@@ -29,6 +29,8 @@ public class EmployeeComponentFactory {
     private final BookService bookService;
     private final OrderService orderService;
     private final OrderRepository orderRepository;
+    private static Boolean componentsForTest;
+    private static Stage stage;
 
     private static volatile EmployeeComponentFactory instance;
 
@@ -42,14 +44,15 @@ public class EmployeeComponentFactory {
         }
         return instance;
     }
+    public static void resetInstance(){
+        instance = null;
+    }
     public EmployeeComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.bookRepository = new BookRepositoryCacheDecorator(new BookRepositoryMySql(connection), new Cache<>());
         this.bookService = new BookServiceImpl(bookRepository);
         this.orderRepository = new OrderRepositoryMySql(connection);
         this.orderService = new OrderServiceImpl(orderRepository);
-
-
 
         List<BookDTO> booksDTOs = BookMapper.convertBookListToBookDTOList(bookService.findAll());
         this.bookView = new BookView(primaryStage, booksDTOs);
@@ -73,4 +76,11 @@ public class EmployeeComponentFactory {
         return bookService;
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
+    public static Boolean getComponentsForTest() {
+        return componentsForTest;
+    }
 }

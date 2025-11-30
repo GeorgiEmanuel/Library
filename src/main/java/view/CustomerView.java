@@ -24,6 +24,8 @@ public class CustomerView {
     private ComboBox<String> employeesComboBoxView;
     
     private Button orderButton;
+
+    private Button logOutButton;
     
     private final ObservableList<BookDTO> booksObservableList;
     
@@ -91,8 +93,9 @@ public class CustomerView {
 
 
         orderButton = new Button("Order");
+        logOutButton = new Button("Log Out");
 
-        HBox hBox = new HBox(10, employeesComboBoxView, orderButton);
+        HBox hBox = new HBox(10, employeesComboBoxView, orderButton, logOutButton);
         hBox.setAlignment(Pos.CENTER);
         gridPane.add(hBox, 0, 3, 10, 1);
 
@@ -100,6 +103,10 @@ public class CustomerView {
 
     public void addOrderButtonListener(EventHandler<ActionEvent> orderButtonListener){
         orderButton.setOnAction(orderButtonListener);
+    }
+
+    public void addLogOutButtonListener(EventHandler<ActionEvent> logOutButtonListener){
+        logOutButton.setOnAction(logOutButtonListener);
     }
 
     public TableView getBookTableView() {

@@ -24,6 +24,7 @@ public class LoginView {
     private Button signInButton;
     private Button logInButton;
     private Text actionTarget;
+    private Scene scene;
 
     public LoginView(Stage primaryStage){
         primaryStage.setTitle("Book Store");
@@ -31,7 +32,7 @@ public class LoginView {
         GridPane gridPane = new GridPane();
         initializeGridPane(gridPane);
 
-        Scene scene = new Scene(gridPane, 720, 480);
+        scene = new Scene(gridPane, 720, 480);
         primaryStage.setScene(scene);
 
         initializeSceneTitle(gridPane);
@@ -90,6 +91,7 @@ public class LoginView {
     public String getPassword() {
         return passwordField.getText();
     }
+
     public void setActionTargetText(String text){ this.actionTarget.setText(text);}
 
     public void addLoginButtonListener(EventHandler<ActionEvent> logInButtonListener){
@@ -98,6 +100,24 @@ public class LoginView {
 
     public void addRegisterButtonListener(EventHandler<ActionEvent> signInButtonListener){
         signInButton.setOnAction(signInButtonListener);
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
+
+    public void setUserTextField(String username) {
+        this.userTextField.setText(username);
+    }
+
+    public void setPasswordField(String password) {
+        this.passwordField.setText(password);
+    }
+
+    public void resetLoginViewFields(){
+        setActionTargetText("");
+        setPasswordField("");
+        setUserTextField("");
     }
 }
 
