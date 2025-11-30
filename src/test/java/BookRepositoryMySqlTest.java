@@ -25,27 +25,27 @@ public class BookRepositoryMySqlTest {
         this.bookService = new BookServiceImpl(this.bookRepository);
     }
 
-//    @Test
-//    public void findAll(){
-//        setup();
-//        List<Book> books = bookService.findAll();
-//        assertEquals(2 , books.size());
-//    }
-//
-//    @Test
-//    public void findById(){
-//        setup();
-//        Optional<Book> book = Optional.empty();
-//        book = Optional.ofNullable(bookService.findById(1L));
-//        assertFalse(book.isEmpty());
-//
-//    }
-//
-//    @Test
-//    public void save(){
-//        setup();
-//        assertTrue(bookService.save(new BookBuilder().setTitle("Moara cu noroc").setAuthor("Ioan Slavici").setPublishDate(
-//                LocalDate.of(1950, 10, 2)).build()));
-//    }
+    @Test
+    public void findAll(){
+        setup();
+        List<Book> books = bookService.findAll();
+        assertEquals(3 , books.size());
+    }
+
+    @Test
+    public void findById(){
+        setup();
+        Optional<Book> book = Optional.empty();
+        book = Optional.ofNullable(bookService.findById(1L));
+        assertFalse(book.isEmpty());
+
+    }
+
+    @Test
+    public void save(){
+        setup();
+        assertFalse(bookService.save(new BookBuilder().setTitle("Risipitorii").setAuthor("Marin Preda").setPublishDate(
+                LocalDate.of(1950, 10, 2)).setQuantity(15L).setPrice(35L).build()).hasErrors());
+    }
 
 }

@@ -60,7 +60,7 @@ public class CustomerComponentFactory {
     public static void resetInstance(){
         instance = null;
     }
-    public CustomerComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
+    private CustomerComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTest).getConnection();
         this.bookRepository = new BookRepositoryCacheDecorator(new BookRepositoryMySql(connection), new Cache<>());
         this.bookService = new BookServiceImpl(bookRepository);

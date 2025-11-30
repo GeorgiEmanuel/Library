@@ -39,7 +39,7 @@ public class LoginComponentFactory {
         }
         return instance;
     }
-    public LoginComponentFactory(Boolean componentsForTests, Stage stage){
+    private LoginComponentFactory(Boolean componentsForTests, Stage stage){
         Connection connection = DataBaseConnectionFactory.getConnectionWrapper(componentsForTests).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);

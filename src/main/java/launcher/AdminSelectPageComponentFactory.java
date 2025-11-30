@@ -25,7 +25,7 @@ public class AdminSelectPageComponentFactory {
         instance = null;
     }
 
-    public AdminSelectPageComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
+    private AdminSelectPageComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
         this.adminSelectPageView = new AdminSelectPageView(primaryStage);
         this.adminSelectPageController = new AdminSelectPageController(componentsForTest, adminSelectPageView, user);
     }
