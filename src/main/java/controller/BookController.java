@@ -2,6 +2,11 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.stage.Stage;
+import launcher.AdminComponentFactory;
+import launcher.AdminSelectPageComponentFactory;
+import launcher.EmployeeComponentFactory;
+import launcher.LoginComponentFactory;
 import mapper.BookMapper;
 import model.Book;
 import model.User;
@@ -9,10 +14,13 @@ import model.validator.Notification;
 import service.book.BookService;
 import service.order.OrderService;
 import view.BookView;
+import view.LoginView;
 import view.model.BookDTO;
 import view.model.builder.BookDTOBuilder;
 
 import java.time.LocalDateTime;
+
+import static database.Constants.Roles.ADMINISTRATOR;
 
 public class BookController {
 
@@ -31,7 +39,7 @@ public class BookController {
         this.bookView.addSaveButtonListener(new SaveButtonListener());
         this.bookView.addDeleteButtonListener(new DeleteButtonListener());
         this.bookView.addOrderButtonListener(new OrderButtonListener());
-
+        this.bookView.addLogOutButtonListener(new LogOutButtonListener());
     }
 
     private class SaveButtonListener implements EventHandler<ActionEvent> {
@@ -139,6 +147,22 @@ public class BookController {
             }else {
                 bookView.addDisplayAlertMessage("Order failed!", "Problem at ordering a book", "Please select a book before ordering");
             }
+        }
+    }
+
+    public class LogOutButtonListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            Stage primaryStage = LoginComponentFactory.getStage();
+            LoginView loginView = LoginComponentFactory.getInstance(EmployeeComponentFactory.getComponentsForTest(), EmployeeComponentFactory.getStage()).getLoginView();
+            EmployeeComponentFactory.resetInstance();
+            if (user.getRoles().getFirst().getRole().equals(ADMINISTRATOR)){
+                AdminSelectPageComponentFactory.resetInstance();
+                AdminComponentFactory.resetInstance();
+            }
+            loginView.resetLoginViewFields();
+            primaryStage.setScene(loginView.getScene());
         }
     }
 }

@@ -2,13 +2,19 @@ package controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.stage.Stage;
+import launcher.AdminComponentFactory;
+import launcher.CustomerComponentFactory;
+import launcher.LoginComponentFactory;
 import mapper.BookMapper;
 import model.Book;
 import model.User;
 import model.validator.Notification;
 import service.book.BookService;
 import service.order.OrderService;
+import service.user.AuthentificationServiceImpl;
 import view.CustomerView;
+import view.LoginView;
 import view.model.BookDTO;
 
 
@@ -28,6 +34,7 @@ public class CustomerController {
         this.user = user;
 
         this.customerView.addOrderButtonListener(new OrderButtonListener());
+        this.customerView.addLogOutButtonListener(new LogOutButtonListener());
     }
 
     private class OrderButtonListener implements EventHandler<ActionEvent> {
@@ -65,6 +72,19 @@ public class CustomerController {
                     customerView.addDisplayAlertMessage("Order failed!", "Problem at ordering a book", "Please select a book before ordering");
                 }
             }
+        }
+    }
+
+    public class LogOutButtonListener implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+
+            Stage primaryStage = LoginComponentFactory.getStage();
+            LoginView loginView = LoginComponentFactory.getInstance(CustomerComponentFactory.getComponentsForTest(), CustomerComponentFactory.getStage()).getLoginView();
+            CustomerComponentFactory.resetInstance();
+            loginView.resetLoginViewFields();
+            primaryStage.setScene(loginView.getScene());
         }
     }
 }

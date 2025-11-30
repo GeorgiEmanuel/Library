@@ -12,9 +12,11 @@ public class AdminSelectPageController {
 
     private AdminSelectPageView adminSelectPageView;
     private final User user;
+    private final Boolean componentsFortTests;
 
-    public AdminSelectPageController(AdminSelectPageView adminSelectPageView, User user){
+    public AdminSelectPageController(Boolean componentsFortTests, AdminSelectPageView adminSelectPageView, User user){
         this.adminSelectPageView = adminSelectPageView;
+        this.componentsFortTests = componentsFortTests;
 
         this.adminSelectPageView.addBookSceneButtonListener(new BookSceneButtonListener());
         this.adminSelectPageView.addUserSceneButtonListener(new UsersSceneButtonListener());
@@ -26,7 +28,7 @@ public class AdminSelectPageController {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-            EmployeeComponentFactory.getInstance(Boolean.FALSE, adminSelectPageView.getPrimaryStage(), user);
+            EmployeeComponentFactory.getInstance(componentsFortTests, adminSelectPageView.getPrimaryStage(), user);
         }
     }
 
@@ -34,7 +36,7 @@ public class AdminSelectPageController {
 
         @Override
         public void handle(ActionEvent actionEvent) {
-            AdminComponentFactory.getInstance(Boolean.FALSE, adminSelectPageView.getPrimaryStage());
+            AdminComponentFactory.getInstance(componentsFortTests, adminSelectPageView.getPrimaryStage());
         }
     }
 

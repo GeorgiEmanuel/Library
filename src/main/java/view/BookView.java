@@ -43,6 +43,8 @@ public class BookView {
 
     private Button orderButton;
 
+    private Button logOutButton;
+
 
 
 
@@ -127,8 +129,10 @@ public class BookView {
 
         orderButton = new Button("Order");
 
+        logOutButton = new Button("Log Out");
+
         HBox buttonBox = new HBox(10);
-        buttonBox.getChildren().addAll(saveButton, deleteButton, orderButton);
+        buttonBox.getChildren().addAll(saveButton, deleteButton, orderButton, logOutButton);
         gridPane.add(buttonBox, 4, 2);
 
 
@@ -146,6 +150,11 @@ public class BookView {
     public void addOrderButtonListener(EventHandler<ActionEvent> orderButtonListener){
         orderButton.setOnAction(orderButtonListener);
     }
+
+    public void addLogOutButtonListener(EventHandler<ActionEvent> logOutButtonListener){
+        logOutButton.setOnAction(logOutButtonListener);
+    }
+
 
     public void addDisplayAlertMessage(String title, String header, String content){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

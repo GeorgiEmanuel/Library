@@ -11,19 +11,22 @@ public class AdminSelectPageComponentFactory {
 
     private static volatile AdminSelectPageComponentFactory instance;
 
-    public static AdminSelectPageComponentFactory getInstance(Stage stage, User user){
+    public static AdminSelectPageComponentFactory getInstance(Boolean componentsForTest, Stage stage, User user){
         if (instance == null){
             synchronized (AdminSelectPageComponentFactory.class){
                 if (instance == null){
-                    instance = new AdminSelectPageComponentFactory(stage, user);
+                    instance = new AdminSelectPageComponentFactory(componentsForTest, stage, user);
                 }
             }
         }
         return instance;
     }
+    public static void resetInstance(){
+        instance = null;
+    }
 
-    public AdminSelectPageComponentFactory(Stage primaryStage, User user){
+    public AdminSelectPageComponentFactory(Boolean componentsForTest, Stage primaryStage, User user){
         this.adminSelectPageView = new AdminSelectPageView(primaryStage);
-        this.adminSelectPageController = new AdminSelectPageController(adminSelectPageView, user);
+        this.adminSelectPageController = new AdminSelectPageController(componentsForTest, adminSelectPageView, user);
     }
 }
